@@ -17,3 +17,14 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+  payout:
+    rules:
+      high-amount: 200000
+      new-beneficiary-min-amount: 50000
+      fan-in-threshold: 5
+      fan-in-window: 60m
+    lock:
+      ttl-ms: 5000
+      retry-attempts: 3
+      retry-delay-ms: 100
