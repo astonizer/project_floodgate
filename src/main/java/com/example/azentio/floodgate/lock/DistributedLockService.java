@@ -1,4 +1,4 @@
-package lock;
+package com.example.azentio.floodgate.lock;
 
 import java.util.function.Supplier;
 

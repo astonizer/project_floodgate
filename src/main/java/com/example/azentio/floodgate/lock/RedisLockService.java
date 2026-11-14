@@ -1,4 +1,4 @@
-package lock;
+package com.example.azentio.floodgate.lock;
 
 import com.example.azentio.floodgate.config.RulesConfig;
 import com.example.azentio.floodgate.exception.LockAcquisitionException;

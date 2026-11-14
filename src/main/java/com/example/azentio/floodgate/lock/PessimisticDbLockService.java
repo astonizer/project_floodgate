@@ -1,4 +1,4 @@
-package lock;
+package com.example.azentio.floodgate.lock;
 
 import com.example.azentio.floodgate.repository.PayoutRepository;
 import lombok.RequiredArgsConstructor;
