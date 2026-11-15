@@ -1,5 +1,0 @@
-package com.example.azentio.floodgate.models.enums;
-
-public enum PayoutStatus {
-    AUTO_RELEASED, HELD, RELEASED, REJECTED
-}
