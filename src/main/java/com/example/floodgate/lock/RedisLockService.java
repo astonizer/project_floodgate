@@ -36,12 +36,12 @@ public class RedisLockService implements DistributedLockService {
 
     @Override
     public <T> T executeWithLock(String lockKey, Supplier<T> action) {
-        String key   = LOCK_PREFIX + lockKey;
+        String key = LOCK_PREFIX + lockKey;
         String token = UUID.randomUUID().toString();
 
-        int  attempts = config.getLock().getRetryAttempts();
-        long delayMs  = config.getLock().getRetryDelayMs();
-        long ttlMs    = config.getLock().getTtlMs();
+        int attempts = config.getLock().getRetryAttempts();
+        long delayMs = config.getLock().getRetryDelayMs();
+        long ttlMs = config.getLock().getTtlMs();
 
         for (int attempt = 1; attempt <= attempts; attempt++) {
             Boolean acquired = redisTemplate.opsForValue()

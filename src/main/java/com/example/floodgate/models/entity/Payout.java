@@ -4,7 +4,9 @@ package com.example.floodgate.models.entity;
 import com.example.floodgate.models.enums.PayoutStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -53,6 +55,7 @@ public class Payout {
     private String channel;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(nullable = false, length = 20)
     private PayoutStatus status;
 

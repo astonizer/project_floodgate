@@ -5,6 +5,6 @@ import com.example.floodgate.models.dto.PayoutRequest;
 import com.example.floodgate.models.dto.PayoutResponse;
 
 public interface PayoutService {
-    public PayoutResponse process(PayoutRequest request);
-    public PagedPayoutResponse getHeldPayouts(int page, int size);
+    PayoutResponse process(PayoutRequest request);
+    PagedPayoutResponse getHeldPayouts(int page, int size);
 }

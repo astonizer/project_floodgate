@@ -18,10 +18,6 @@ import java.util.Optional;
 @Repository
 public interface PayoutRepository extends JpaRepository<Payout, Long> {
 
-    // -------------------------------------------------------------------------
-    // Idempotency lookups
-    // -------------------------------------------------------------------------
-
     /** Plain read — called before acquiring any lock (fast path). */
     Optional<Payout> findByPayoutId(String payoutId);
 
@@ -32,11 +28,6 @@ public interface PayoutRepository extends JpaRepository<Payout, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT p FROM Payout p WHERE p.payoutId = :payoutId")
     Optional<Payout> findByPayoutIdForUpdate(@Param("payoutId") String payoutId);
-
-    // -------------------------------------------------------------------------
-    // NEW_BENEFICIARY rule
-    // Uses idx_payouts_new_beneficiary: (source_account, beneficiary_account, status)
-    // -------------------------------------------------------------------------
 
     /**
      * Returns {@code true} if a prior clean payout exists from {@code sourceAccount}
@@ -54,11 +45,6 @@ public interface PayoutRepository extends JpaRepository<Payout, Long> {
             @Param("beneficiaryAccount") String              beneficiaryAccount,
             @Param("statuses") List<PayoutStatus> statuses
     );
-
-    // -------------------------------------------------------------------------
-    // GET /api/payouts?status=  (paginated, newest-first)
-    // Uses idx_payouts_status_created_all: (status, created_at DESC)
-    // -------------------------------------------------------------------------
 
     Page<Payout> findByStatusOrderByCreatedAtDesc(PayoutStatus status, Pageable pageable);
 }

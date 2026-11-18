@@ -1,9 +1,10 @@
 package com.example.floodgate.models.dto;
 
-import tools.jackson.databind.annotation.JsonFormat;import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -13,7 +14,7 @@ import java.time.OffsetDateTime;
  */
 @Value
 @Builder
-@Jacksonized
+@JsonDeserialize(builder = PayoutRequest.PayoutRequestBuilder.class)
 public class PayoutRequest {
 
     @NotBlank(message = "payoutId is required")
@@ -54,6 +55,8 @@ public class PayoutRequest {
     String channel;
 
     @NotNull(message = "createdAt is required")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     OffsetDateTime createdAt;
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class PayoutRequestBuilder {}
 }

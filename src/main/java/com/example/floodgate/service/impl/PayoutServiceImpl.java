@@ -37,10 +37,6 @@ class PayoutServiceImpl implements PayoutService {
     private final PessimisticDbLockService dbLockService;
     private final FanInStore fanInStore;
 
-    // -------------------------------------------------------------------------
-    // Public API
-    // -------------------------------------------------------------------------
-
     /**
      * Process a payout and return a screening decision.
      *
@@ -97,10 +93,6 @@ class PayoutServiceImpl implements PayoutService {
                 .totalPages(pg.getTotalPages())
                 .build();
     }
-
-    // -------------------------------------------------------------------------
-    // Internals
-    // -------------------------------------------------------------------------
 
     /**
      * Must be called while holding a lock on {@code request.payoutId()}.
