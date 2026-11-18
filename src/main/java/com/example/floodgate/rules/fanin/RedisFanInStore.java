@@ -1,6 +1,5 @@
 package com.example.floodgate.rules.fanin;
 
-
 import com.example.floodgate.config.RulesConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +40,10 @@ public class RedisFanInStore implements FanInStore {
         String key = key(beneficiaryAccount);
         // ZSCORE returns null if the member doesn't exist
         Double score = redisTemplate.opsForZSet().score(key, sourceAccount);
-        if (score == null) return false;
+        if(score == null) return false;
+
         long scoreMs = score.longValue();
-        return scoreMs >= windowStartEpochMs && scoreMs <= windowEndEpochMs;
+        return windowStartEpochMs <= scoreMs && scoreMs <= windowEndEpochMs;
     }
 
     @Override
@@ -57,6 +57,8 @@ public class RedisFanInStore implements FanInStore {
         zset.add(key, sourceAccount, createdAtEpochMs);
 
         // Trim entries older than 2× window to handle out-of-order arrivals
+        // Using 2× gives a buffer, entries stay in Redis a bit longer than strictly needed,
+        // so out-of-order arrivals still get accurately counted against their true time window.
         long retentionStart = createdAtEpochMs
                 - (config.getRules().getFanInWindow().toMillis() * 2);
         zset.removeRangeByScore(key, Double.NEGATIVE_INFINITY, retentionStart - 1);
