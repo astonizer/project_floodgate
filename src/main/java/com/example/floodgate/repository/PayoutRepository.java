@@ -41,8 +41,8 @@ public interface PayoutRepository extends JpaRepository<Payout, Long> {
           AND p.status IN :statuses
         """)
     boolean existsCleanPayout(
-            @Param("sourceAccount")      String              sourceAccount,
-            @Param("beneficiaryAccount") String              beneficiaryAccount,
+            @Param("sourceAccount")      String sourceAccount,
+            @Param("beneficiaryAccount") String beneficiaryAccount,
             @Param("statuses") List<PayoutStatus> statuses
     );
 
