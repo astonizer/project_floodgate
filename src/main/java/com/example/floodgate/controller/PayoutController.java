@@ -5,13 +5,17 @@ import com.example.floodgate.models.dto.PayoutRequest;
 import com.example.floodgate.models.dto.PayoutResponse;
 import com.example.floodgate.service.PayoutService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/payouts")
+@Validated
 @RequiredArgsConstructor
 public class PayoutController {
 
@@ -43,8 +47,8 @@ public class PayoutController {
     @GetMapping
     public ResponseEntity<PagedPayoutResponse> getHeld(
             @RequestParam(defaultValue = "HELD") String status,
-            @RequestParam(defaultValue = "0")    int    page,
-            @RequestParam(defaultValue = "20")   int    size) {
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size) {
         PagedPayoutResponse response = payoutService.getHeldPayouts(page, size);
         return ResponseEntity.ok(response);
     }

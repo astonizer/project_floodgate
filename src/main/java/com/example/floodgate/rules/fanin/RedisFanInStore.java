@@ -67,6 +67,8 @@ public class RedisFanInStore implements FanInStore {
                 - (config.getRules().getFanInWindow().toMillis() * 2);
         zset.removeRangeByScore(key, Double.NEGATIVE_INFINITY, retentionStart - 1);
 
+        redisTemplate.expire(key, config.getRules().getFanInWindow().multipliedBy(2));
+
         log.debug("FAN_IN recorded src={} → bene={} at={}",
                 MaskingUtils.maskAccount(sourceAccount),
                 MaskingUtils.maskAccount(beneficiaryAccount),
