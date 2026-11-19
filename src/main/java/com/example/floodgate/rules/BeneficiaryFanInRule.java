@@ -30,7 +30,7 @@ public class BeneficiaryFanInRule implements PayoutRule {
         long existingCount = fanInStore.countDistinctPayers(
                 request.getBeneficiaryAccount(),
                 windowStartMs,
-                windowMs
+                createdAtMs
         );
 
         // Is the current payer already counted in the window?
@@ -40,7 +40,7 @@ public class BeneficiaryFanInRule implements PayoutRule {
                 request.getBeneficiaryAccount(),
                 request.getSourceAccount(),
                 windowStartMs,
-                windowMs
+                createdAtMs
         );
 
         long projectedTotal = alreadyCounted ? existingCount: existingCount + 1;

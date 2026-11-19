@@ -26,18 +26,14 @@ public class NewBeneficiaryRule implements PayoutRule {
 
     @Override
     public Optional<RuleCode> evaluate(PayoutRequest request) {
-        // Amount gate first — avoids DB round-trip for small amounts
-        if(request.getAmount().compareTo(config.getRules().getNewBeneficiaryMinAmount()) >= 0) {
-            return Optional.of(RuleCode.NEW_BENEFICIARY);
-        }
-
+        boolean isHighAmount = request.getAmount().compareTo(config.getRules().getNewBeneficiaryMinAmount()) >= 0;
         boolean exists = repository.existsCleanPayout(
                 request.getSourceAccount(),
                 request.getBeneficiaryAccount(),
                 CLEAN_STATUSES
         );
 
-        if(!exists) {
+        if(!exists && isHighAmount) {
             // MASKING: account numbers must be masked before logging
             log.debug("NEW_BENEFICIARY fired payoutId={} src={} bene={}",
                     request.getPayoutId(),

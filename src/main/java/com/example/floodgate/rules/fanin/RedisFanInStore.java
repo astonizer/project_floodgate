@@ -1,6 +1,7 @@
 package com.example.floodgate.rules.fanin;
 
 import com.example.floodgate.config.RulesConfig;
+import com.example.floodgate.utils.MaskingUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,7 +29,10 @@ public class RedisFanInStore implements FanInStore {
                 .rangeByScore(key, windowStartEpochMs, windowEndEpochMs);
         long count = (members == null) ? 0L : members.size();
         log.debug("FAN_IN count bene={} window=[{},{}] → {}",
-                beneficiaryAccount, windowStartEpochMs, windowEndEpochMs, count);
+                MaskingUtils.maskAccount(beneficiaryAccount),
+                windowStartEpochMs,
+                windowEndEpochMs,
+                count);
         return count;
     }
 
@@ -63,7 +67,10 @@ public class RedisFanInStore implements FanInStore {
                 - (config.getRules().getFanInWindow().toMillis() * 2);
         zset.removeRangeByScore(key, Double.NEGATIVE_INFINITY, retentionStart - 1);
 
-        log.debug("FAN_IN recorded src={} → bene={} at={}", sourceAccount, beneficiaryAccount, createdAtEpochMs);
+        log.debug("FAN_IN recorded src={} → bene={} at={}",
+                MaskingUtils.maskAccount(sourceAccount),
+                MaskingUtils.maskAccount(beneficiaryAccount),
+                createdAtEpochMs);
     }
 
     private static String key(String beneficiaryAccount) {
